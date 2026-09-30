@@ -1,0 +1,4 @@
+#dr_settings label { display: block; margin-top: 8px; }
+#dr_settings .dr_buttons { display: flex; gap: 8px; margin: 10px 0; flex-wrap: wrap; }
+#dr_settings .dr_json { font-family: monospace; font-size: 12px; white-space: pre; }
+#dr_settings #dr_status { display: block; opacity: 0.8; margin: 6px 0; }
