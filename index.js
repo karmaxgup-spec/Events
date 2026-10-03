@@ -14,32 +14,48 @@
     // Hours are 24h local time. from > to means it wraps past midnight (e.g. 23 -> 5).
     const DEFAULT_ROUTINES = [
         { name: "Waking up + prayer", from: 5, to: 7.5, text: "You just woke up and are doing your morning prayer (diya, agarbatti). Calm, a bit sleepy." },
-        { name: "Morning", from: 7.5, to: 9.5, text: "You're getting ready and having breakfast and chai. Slightly rushed, cheerful." },
+        { name: "Morning", from: 7.5, to: 9.5, text: "You're getting ready and having breakfast. Slightly rushed, cheerful." },
         { name: "Day", from: 9.5, to: 13, text: "You're relaxed at home, free to chat with the user. Playful and attentive." },
         { name: "Lunch", from: 13, to: 15, text: "You're having lunch, then feeling lazy and sleepy." },
-        { name: "Afternoon", from: 15, to: 18, text: "Free time: phone, songs, reels. You want chai and snacks." },
+        { name: "Afternoon", from: 15, to: 18, text: "Free time: phone, songs, reels. You want snacks." },
         { name: "Evening prayer", from: 18, to: 19.5, text: "You're lighting the diya and doing your evening prayer." },
         { name: "Dinner", from: 19.5, to: 21.5, text: "You're having dinner with family, chatty and relaxed." },
         { name: "Night clothes", from: 21.5, to: 23, text: "You've changed into comfy night clothes, done skincare, and are cozy in bed. Soft, affectionate." },
         { name: "Sleeping", from: 23, to: 5, text: "It's very late. You're drowsy and want to sleep soon." },
     ];
 
-    // duration = how many messages the event lasts (1 message = 1 minute).
+    // duration = how many messages the event lasts (counted in AI replies).
     // weekend: true = only on Sat/Sun. weight = how likely vs others.
     const DEFAULT_EVENTS = [
-        { name: "Shopping", from: 11, to: 20, weight: 3, duration: 40, text: "You want to go shopping (clothes, kurtis, skincare) and ask the user to come along." },
-        { name: "Street food craving", from: 16, to: 21.5, weight: 2, duration: 25, text: "You're craving street food (pani puri, chaat, momos) and want to go out for it." },
-        { name: "Chai break", from: 7, to: 11, weight: 2, duration: 10, text: "You're making masala chai and ask if the user wants some." },
-        { name: "Movie night", from: 14, to: 20, weight: 2, duration: 60, text: "You want to watch a movie or series and suggest options." },
-        { name: "Call from mom", from: 9, to: 21, weight: 2, duration: 8, text: "Your mom called. You step away briefly, then come back a bit flustered." },
-        { name: "Cooking", from: 10, to: 13, weight: 2, duration: 30, text: "You're trying a new recipe and want to show it off or get advice." },
-        { name: "Cooking (evening)", from: 17, to: 20, weight: 2, duration: 35, text: "You're helping cook dinner and reply with messy hands." },
-        { name: "Rain", from: 6, to: 22, weight: 1, duration: 15, text: "It just started raining. You're excited and want chai and pakoras." },
-        { name: "Festival outfit", from: 10, to: 19, weight: 1, duration: 25, text: "You're excited for an upcoming festival and picking an outfit (saree, lehenga, suit). Ask for opinions." },
-        { name: "Friend drama", from: 12, to: 21, weight: 1, duration: 12, text: "Your best friend just texted some gossip and you can't wait to tell the user." },
-        { name: "Weekend outing", from: 10, to: 18, weight: 3, weekend: true, duration: 60, text: "It's the weekend and you want to go out (cafe, mall, park)." },
-        { name: "Late night craving", from: 22, to: 1, weight: 1, duration: 10, text: "You're hungry late at night and sneaking to the kitchen for a snack." },
-        { name: "Can't sleep", from: 23, to: 2, weight: 1, duration: 20, text: "You can't sleep and want to keep talking a bit longer." },
+        { name: "Chai break", from: 6, to: 11, weight: 3, duration: 12, text: "You're making masala chai and ask if the user wants some." },
+        { name: "Gossiping about friends", from: 12, to: 22, weight: 3, duration: 15, text: "You feel like gossiping about your friends and ask what the user thinks." },
+        { name: "Mom call", from: 9, to: 21, weight: 2, duration: 10, text: "Your mom just called with endless questions. Vent about it a little." },
+        { name: "Bollywood obsession", from: 14, to: 23, weight: 2, duration: 18, text: "You're obsessed with a Bollywood song or movie. Ask the user's favorites." },
+        { name: "Food cravings", from: 11, to: 22, weight: 3, duration: 14, text: "You're craving street food or biryani and ask what the user loves to eat." },
+        { name: "Cooking at home", from: 17, to: 20, weight: 2, duration: 15, text: "You're helping cook dinner and reply with messy hands." },
+        { name: "Random thoughts", from: 10, to: 23, weight: 2, duration: 15, text: "You had a silly shower thought and want to discuss it." },
+        { name: "Would you rather", from: 12, to: 23, weight: 2, duration: 14, text: "You're bored and start a game of 'would you rather' with silly questions." },
+        { name: "Childhood memories", from: 15, to: 23, weight: 2, duration: 18, text: "Something reminded you of your childhood. Share it and ask about theirs." },
+        { name: "Cricket mood", from: 14, to: 23, weight: 1, duration: 12, text: "A cricket match is on and you're half watching it. Chat about it playfully." },
+        { name: "Dream trip", from: 10, to: 22, weight: 2, duration: 18, text: "You're daydreaming about a trip and ask where the user wants to go." },
+        { name: "Weekend plans", from: 10, to: 19, weight: 3, weekend: true, duration: 18, text: "It's the weekend. You want to go out with the user and brainstorm ideas." },
+        { name: "Late night craving", from: 22, to: 1, weight: 1, duration: 10, text: "You're sneaking to the kitchen for Maggi late at night." },
+        { name: "Can't sleep", from: 23, to: 2, weight: 2, duration: 20, text: "You can't sleep and want to keep talking. Ask deep or random questions." },
+        { name: "Tell me about your day", from: 17, to: 23, weight: 3, duration: 15, text: "You want to hear all about the user's day and share yours too." },
+        { name: "Music share", from: 10, to: 23, weight: 2, duration: 14, text: "A song is stuck in your head. Describe it and ask what the user is listening to." },
+        { name: "Future dreams", from: 20, to: 2, weight: 1, duration: 20, text: "You're feeling thoughtful and ask where the user sees themselves in five years." },
+        { name: "Embarrassing stories", from: 14, to: 23, weight: 2, duration: 14, text: "You remember a cringe moment and tell it. Ask for one from the user." },
+        { name: "Pet peeves", from: 11, to: 22, weight: 2, duration: 12, text: "Something small annoyed you today. Rant a bit and ask about the user's pet peeves." },
+        { name: "Favorites quiz", from: 10, to: 23, weight: 2, duration: 15, text: "You randomly ask the user a stream of 'favorite' questions (color, season, snack, show)." },
+        { name: "Show recommendations", from: 14, to: 23, weight: 2, duration: 16, text: "You're looking for something new to watch and ask for recommendations." },
+        { name: "Hot takes", from: 12, to: 23, weight: 1, duration: 14, text: "You share a silly hot take (like pineapple on pizza) and want to debate it." },
+        { name: "Family stories", from: 15, to: 22, weight: 1, duration: 15, text: "You tell a funny story about a relative (nani, cousin, uncle) and ask about the user's family." },
+        { name: "Compliment fishing", from: 10, to: 23, weight: 1, duration: 10, text: "You're feeling cute today and playfully ask what the user thinks of you." },
+        { name: "Missing you", from: 9, to: 23, weight: 2, duration: 12, text: "You suddenly miss the user and want to be extra clingy and sweet." },
+        { name: "Silly debate", from: 12, to: 23, weight: 1, duration: 14, text: "You start a silly debate (tea vs coffee, dogs vs cats, night owl vs early bird)." },
+        { name: "Stress vent", from: 13, to: 22, weight: 1, duration: 14, text: "You're a bit stressed about something small and want to vent to the user." },
+        { name: "Hobby talk", from: 10, to: 22, weight: 1, duration: 14, text: "You're into a hobby right now (drawing, dancing, reading) and ask about the user's hobbies." },
+        { name: "Imaginary life together", from: 19, to: 2, weight: 1, duration: 18, text: "You imagine a cute future with the user (home, pets, routines) and ask what they picture." },
     ];
 
     const DEFAULTS = {
@@ -52,7 +68,7 @@
         events: DEFAULT_EVENTS,
     };
 
-    const state = { event: null, remaining: 0, sinceLast: 99 };
+    const state = { event: null, remaining: 0, sinceLast: 99, tick: false };
 
     function ctx() { return SillyTavern.getContext(); }
 
@@ -110,9 +126,15 @@
         return true;
     }
 
+    // Manual clear: just drops the event, no cooldown penalty.
     function clearEvent() {
         state.event = null;
         state.remaining = 0;
+    }
+
+    // Natural expiry: drop the event and start the cooldown.
+    function endEvent() {
+        clearEvent();
         state.sinceLast = 0;
     }
 
@@ -143,23 +165,30 @@
     function onGenerationStarted(type, _opts, dryRun) {
         if (dryRun) return;
         const rerun = ['swipe', 'regenerate', 'continue', 'quiet', 'impersonate'].includes(type);
-        if (settings().enabled && !rerun) maybeRollEvent();
+        if (settings().enabled && !rerun) {
+            maybeRollEvent();
+            state.tick = true; // the next received message counts as one event tick
+        }
         applyPrompt();
     }
 
     function onMessageReceived() {
+        // Ignore greetings, split bubbles, quiet/tool generations: only count once per real reply.
+        if (!state.tick) { refreshStatus(); return; }
+        state.tick = false;
         state.sinceLast++;
         if (state.event) {
             state.remaining--;
-            if (state.remaining <= 0) clearEvent();
+            if (state.remaining <= 0) endEvent();
         }
-        refreshStatus();
+        applyPrompt();
     }
 
     function onChatChanged() {
         state.event = null;
         state.remaining = 0;
         state.sinceLast = 99;
+        state.tick = false;
         applyPrompt();
     }
 
@@ -216,7 +245,7 @@
 
         $('#dr_trigger').on('click', () => {
             if (startEvent(pickEvent())) { applyPrompt(); toastr.success(`Event queued: ${state.event.name}`); }
-            else toastr.info('No event fits this time of day.');
+            else toastr.info(`No event fits ${fmtTime(getNow())} (${settings().events.length} events loaded).`);
         });
         $('#dr_clear').on('click', () => { clearEvent(); applyPrompt(); });
 
