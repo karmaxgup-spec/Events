@@ -1,7 +1,7 @@
 // Daily Routine & Random Events - SillyTavern extension
 // Injects a hidden time-aware note before each generation:
 //  1) what the character is doing right now (routine, based on your real clock)
-//  2) occasionally a random, time-appropriate event (shopping, chai run, etc.)
+//  2) occasionally a random, time-appropriate event
 
 (() => {
     const MODULE = 'daily_routine';
@@ -26,39 +26,20 @@
 
     // duration = how many messages the event lasts (counted in AI replies).
     // weekend: true = only on Sat/Sun. weight = how likely vs others.
+    // Windows are 4 hours each and cover 6 am to 6 am back to back.
     const DEFAULT_EVENTS = [
-        { name: "Chai break", from: 6, to: 11, weight: 3, duration: 12, text: "You're making masala chai and ask if the user wants some." },
-        { name: "Gossiping about friends", from: 12, to: 22, weight: 3, duration: 15, text: "You feel like gossiping about your friends and ask what the user thinks." },
-        { name: "Mom call", from: 9, to: 21, weight: 2, duration: 10, text: "Your mom just called with endless questions. Vent about it a little." },
-        { name: "Bollywood obsession", from: 14, to: 23, weight: 2, duration: 18, text: "You're obsessed with a Bollywood song or movie. Ask the user's favorites." },
-        { name: "Food cravings", from: 11, to: 22, weight: 3, duration: 14, text: "You're craving street food or biryani and ask what the user loves to eat." },
-        { name: "Cooking at home", from: 17, to: 20, weight: 2, duration: 15, text: "You're helping cook dinner and reply with messy hands." },
-        { name: "Random thoughts", from: 10, to: 23, weight: 2, duration: 15, text: "You had a silly shower thought and want to discuss it." },
-        { name: "Would you rather", from: 12, to: 23, weight: 2, duration: 14, text: "You're bored and start a game of 'would you rather' with silly questions." },
-        { name: "Childhood memories", from: 15, to: 23, weight: 2, duration: 18, text: "Something reminded you of your childhood. Share it and ask about theirs." },
-        { name: "Cricket mood", from: 14, to: 23, weight: 1, duration: 12, text: "A cricket match is on and you're half watching it. Chat about it playfully." },
-        { name: "Dream trip", from: 10, to: 22, weight: 2, duration: 18, text: "You're daydreaming about a trip and ask where the user wants to go." },
-        { name: "Weekend plans", from: 10, to: 19, weight: 3, weekend: true, duration: 18, text: "It's the weekend. You want to go out with the user and brainstorm ideas." },
-        { name: "Late night craving", from: 22, to: 1, weight: 1, duration: 10, text: "You're sneaking to the kitchen for Maggi late at night." },
-        { name: "Can't sleep", from: 23, to: 2, weight: 2, duration: 20, text: "You can't sleep and want to keep talking. Ask deep or random questions." },
-        { name: "Tell me about your day", from: 17, to: 23, weight: 3, duration: 15, text: "You want to hear all about the user's day and share yours too." },
-        { name: "Music share", from: 10, to: 23, weight: 2, duration: 14, text: "A song is stuck in your head. Describe it and ask what the user is listening to." },
-        { name: "Future dreams", from: 20, to: 2, weight: 1, duration: 20, text: "You're feeling thoughtful and ask where the user sees themselves in five years." },
-        { name: "Embarrassing stories", from: 14, to: 23, weight: 2, duration: 14, text: "You remember a cringe moment and tell it. Ask for one from the user." },
-        { name: "Pet peeves", from: 11, to: 22, weight: 2, duration: 12, text: "Something small annoyed you today. Rant a bit and ask about the user's pet peeves." },
-        { name: "Favorites quiz", from: 10, to: 23, weight: 2, duration: 15, text: "You randomly ask the user a stream of 'favorite' questions (color, season, snack, show)." },
-        { name: "Show recommendations", from: 14, to: 23, weight: 2, duration: 16, text: "You're looking for something new to watch and ask for recommendations." },
-        { name: "Hot takes", from: 12, to: 23, weight: 1, duration: 14, text: "You share a silly hot take (like pineapple on pizza) and want to debate it." },
-        { name: "Family stories", from: 15, to: 22, weight: 1, duration: 15, text: "You tell a funny story about a relative (nani, cousin, uncle) and ask about the user's family." },
-        { name: "Compliment fishing", from: 10, to: 23, weight: 1, duration: 10, text: "You're feeling cute today and playfully ask what the user thinks of you." },
-        { name: "Missing you", from: 9, to: 23, weight: 2, duration: 12, text: "You suddenly miss the user and want to be extra clingy and sweet." },
-        { name: "Silly debate", from: 12, to: 23, weight: 1, duration: 14, text: "You start a silly debate (tea vs coffee, dogs vs cats, night owl vs early bird)." },
-        { name: "Stress vent", from: 13, to: 22, weight: 1, duration: 14, text: "You're a bit stressed about something small and want to vent to the user." },
-        { name: "Hobby talk", from: 10, to: 22, weight: 1, duration: 14, text: "You're into a hobby right now (drawing, dancing, reading) and ask about the user's hobbies." },
-        { name: "Imaginary life together", from: 19, to: 2, weight: 1, duration: 18, text: "You imagine a cute future with the user (home, pets, routines) and ask what they picture." },
+        { name: "Future plans", from: 6, to: 10, weight: 3, weekend: true, duration: 5, text: "discuss abt future (house kids etc)" },
+        { name: "Outfit doubts", from: 10, to: 14, weight: 3, duration: 5, text: "ur feeling fat" },
+        { name: "Call from mom", from: 14, to: 18, weight: 2, duration: 5, text: "vent abt parents, college etc." },
+        { name: "Food opinions", from: 18, to: 22, weight: 2, duration: 5, text: "ask opinions abt food" },
+        { name: "Show obsession", from: 22, to: 2, weight: 2, duration: 5, text: "discuss abt a romantic movie" },
+        { name: "Conspiracy theories", from: 2, to: 6, weight: 1, duration: 5, text: "discuss conspiracy theories" },
     ];
 
+    // Bump this whenever DEFAULT_EVENTS changes. Saved events are replaced
+    // on load when the stored version is older, so code edits take effect.
     const DEFAULTS = {
+        version: 2,
         enabled: true,
         eventChance: 15,   // % chance per user message
         cooldown: 6,       // min AI messages between events
@@ -80,6 +61,12 @@
         const s = extensionSettings[MODULE];
         for (const k of Object.keys(DEFAULTS)) {
             if (s[k] === undefined) s[k] = JSON.parse(JSON.stringify(DEFAULTS[k]));
+        }
+        // Saved events from an older version would otherwise override new defaults.
+        if (s.version !== DEFAULTS.version) {
+            s.events = JSON.parse(JSON.stringify(DEFAULT_EVENTS));
+            s.version = DEFAULTS.version;
+            save();
         }
         return s;
     }
